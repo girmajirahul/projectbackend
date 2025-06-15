@@ -39,7 +39,7 @@ router.post('/signup', (req, res) => {
 
 router.post('/upload/',upload.single('file'),(req,res)=>{
     console.log(` uploaded Succesfully !`);
-    const filename=req.file.filename
+    const filename=req.file?.filename
     const userId=req.body.userId
     const query="UPDATE users1 SET images = ? WHERE id = ?";
     db.query(query, [filename, userId], (err, result) => {
