@@ -29,7 +29,7 @@ router.post('/addjobs',upload.single('image'),(req,res)=>{
     console.log(values);
     console.log(image);
     
-    const sql = "INSERT INTO jobs (name, location, post, website, image) VALUES (?);";
+    const sql = "INSERT INTO jobs ( company_name, location, post,logo,website) VALUES (?);";
   db.query(sql, [values], (err, data) => {
     if (err) {
       console.error("DB Error:", err);
