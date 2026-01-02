@@ -1,15 +1,18 @@
 const express=require('express')
 const router = express.Router();
-const db=require('./db')
-router.get('/', (req, res) => {
+const db=require('../config/db')
+const verifyToken=require("../middleware/auth")
+
+router.get('/',  (req, res) => {
     const sql = "SELECT * FROM jobs;";
-    db.query(sql, (err, data) => {
+     db.query(sql, (err, data) => {
         if (err) return res.json(err);
         return res.json(data);
     });
 });
 
-const multer  = require('multer')
+const multer  = require('multer');
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, './uploads')
@@ -31,7 +34,7 @@ router.post('/addjobs',upload.single('image'),(req,res)=>{
     
     const sql = "INSERT INTO jobs ( company_name, location, post,logo,website) VALUES (?);";
   db.query(sql, [values], (err, data) => {
-    if (err) {
+    if (err) {e
       console.error("DB Error:", err);
       return res.status(500).json({ error: "Database insert failed" });
     }

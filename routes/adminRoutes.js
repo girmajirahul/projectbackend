@@ -1,11 +1,12 @@
 const express=require('express')
 const router = express.Router();
 const jwt=require('jsonwebtoken');
-const db=require('./db')
+const db=require('../config/db');
+const verifyToken = require('../middleware/auth');
 
-router.get('/adminData',(req,res)=>{
-    const sql="select * from admin";
-    db.query(sql, (err, data) => {
+router.get('/getjobs',verifyToken ,  (req, res) => {
+    const sql = "SELECT * FROM jobs;";
+     db.query(sql, (err, data) => {
         if (err) return res.json(err);
         return res.json(data);
     });
@@ -22,7 +23,9 @@ router.post('/adminlogin',(req,res) => {
             return res.json({success:false,message:'Invalid Email or password!'});
         }
         const user=result[0];
-        const token=jwt.sign({id:user.id,email:user.email},"mysecret@123",{expiresIn:'1h'});
+        const token=jwt.sign({id:user.id,email:user.email},process.env.JWT_SECRET,{expiresIn:'1h'});
+       
+        
         return res.json({success:true,message:"Login sucessful !",token:token});
     });
 });
